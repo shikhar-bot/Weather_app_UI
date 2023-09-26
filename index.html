@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="weather-side">
+            <div class="weather-gradient"></div>
+            <div class="date-container">
+                <h2 class="date-dayname">Sunday</h2>
+                <span class="date-day">17 Sep 2023</span>
+                <i class="location-icon" data-feather="map-pin"></i>
+                <span class="location">Kashmir, IN</span>
+            </div>
+            <div class="weather-container">
+                <img class="icon" src="images/sun.svg">
+                <h1 class="weather-temp">24°C</h1>
+                <h3 class="weather-desc">Sunny</h3>
+            </div>
+        </div>
+        <div class="info-side">
+            <div class="today-info-container">
+                <div class="today-info">
+                    <div class="precipitation">
+                        <span class="title">VISIBILITY</span>
+                        <span class="value _visibility">0</span>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="humidity">
+                        <span class="title">HUMIDITY</span>
+                        <span class="value _humidity">34 %</span>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="Wind">
+                        <span class="title">WIND</span>
+                        <span class="value _wind">4 km/h</span>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-container">
+                <ul class="week-list">
+                    <li class="active">
+                        <i class="day-icon" data-feather="sun"></i>
+                        <span class="day-name">Sun</span>
+                        <span class="day-temp">24°C</span>
+                    </li>
+                    <li>
+                        <i class="day-icon" data-feather="cloud"></i>
+                        <span class="day-name">Mon</span>
+                        <span class="day-temp">21°C</span>
+                    </li>
+                    <li>
+                        <i class="day-icon" data-feather="cloud-snow"></i>
+                        <span class="day-name">Tue</span>
+                        <span class="day-temp">08°C</span>
+                    </li>
+                    <li>
+                        <i class="day-icon" data-feather="cloud-rain"></i>
+                        <span class="day-name">Wed</span>
+                        <span class="day-temp">19°C</span>
+                    </li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+
+            <div class="location-container">
+                <button id="change-location-button" class="location-button">
+                    <i data-feather="map-pin"></i>
+                    <span>Change Location</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        feather.replace();
+    </script>
+
+    <script src="script.js"></script>
+
+    <script>
+        const apiKey = "95e451942bb93ae454afc917d9f1900e";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=delhi";
+        const Icon = document.querySelector(".icon")
+
+        async function checkWeather(){
+            const response = await fetch(apiUrl + `&appid=${apiKey}`);
+            var data = await response.json();
+
+            console.log(data);
+
+            document.querySelector(".location").innerHTML = data.name;
+            document.querySelector(".weather-temp").innerHTML = Math.round(data.main.temp) + "°c";
+            document.querySelector("._humidity").innerHTML = data.main.humidity + " %";
+            document.querySelector("._wind").innerHTML = data.wind.speed + " km/h";
+            // document.querySelector(".icon").innerHTML = data.weather.icon;
+            document.querySelector("._visibility").innerHTML = data.visibility + " m";
+
+            if(data.weather[0].main == "Clouds"){
+                Icon.src = "images/cloud.svg"
+            } else if(data.weather[0].main == "Clear"){
+                Icon.src = "images/sun.svg"
+            } else if(data.weather[0].main == "Rain"){
+                Icon.src = "images/cloud-rain.svg"
+            } else if(data.weather[0].main == "Snow"){
+                Icon.src = "images/cloud-snow.svg"
+            } else if(data.weather[0].main == "Drizzle"){
+                Icon.src = "images/cloud-drizzle.svg"
+            } else if(data.weather[0].main == "Thunderstorm"){
+                Icon.src = "images/cloud-lightning.svg"
+            }
+            
+        }
+
+        checkWeather();
+    </script>
+</body>
+</html>
